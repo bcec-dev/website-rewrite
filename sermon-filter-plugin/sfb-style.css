@@ -1,0 +1,74 @@
+.sermon-filter-buttons {
+  margin-bottom: 20px;
+}
+
+.sermon-filter-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sermon-filter-button:hover {
+  background-color: #0056b3;
+}
+
+.sermon-filter-button.active {
+  background-color: #0056b3;
+}
+
+.sermon-filter-results {
+  margin-top: 20px;
+}
+
+.taxonomy-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.child-taxonomy-link {
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.child-taxonomy-link:hover {
+  background-color: #d0d0d0;
+}
+
+.child-taxonomy-link .arrow {
+  margin-left: auto;
+  font-size: 1.2em;
+  color: #007bff;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination .page-link {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #ffffff;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #0056b3;
+}
