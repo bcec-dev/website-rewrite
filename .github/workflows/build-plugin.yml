@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'sermon-filter-plugin/**'
+      
   pull_request:
     branches:
       - main
-    paths:
-      - 'sermon-filter-plugin/**'
 
 jobs:
   build:
