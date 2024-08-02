@@ -33,12 +33,12 @@ jobs:
       run: |
         mkdir -p build
         zip -r build/sermon-filter-plugin.zip \
-          sermon-filter-plugin.php \
-          sermon-template.php \
-          js/sfb-script.js \
-          css/sfb-style.css \
-          languages \
-          readme.txt
+          sermon-filter-plugin/sermon-filter-plugin.php \
+          sermon-filter-plugin/sermon-template.php \
+          sermon-filter-plugin/js/sfb-script.js \
+          sermon-filter-plugin/css/sfb-style.css \
+          sermon-filter-plugin/languages \
+          sermon-filter-plugin/readme.txt
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
