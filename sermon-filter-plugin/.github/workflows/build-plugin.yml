@@ -1,0 +1,43 @@
+name: Build Plugin
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'  # or your preferred PHP version
+
+    - name: Run PHP lint
+      run: |
+        find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+    - name: Create plugin zip
+      run: |
+        mkdir -p build
+        zip -r build/sermon-filter-plugin.zip \
+          sermon-filter-plugin.php \
+          sermon-template.php \
+          js/sfb-script.js \
+          css/sfb-style.css \
+          languages \
+          readme.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: sermon-filter-plugin
+        path: build/sermon-filter-plugin.zip

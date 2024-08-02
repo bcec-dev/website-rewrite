@@ -11,8 +11,10 @@ Domain Path: /languages
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-// Define the default number of items per page
-define('DEFAULT_ITEMS_PER_PAGE', 10);
+// Define the default number of posts per page
+define('DEFAULT_NUM_POSTS_PER_PAGE', 6);
+// Define the default number terms per page
+define('DEFAULT_NUM_TERMS_PER_PAGE', 10);
 
 // Load plugin textdomain for translations
 function sfb_load_textdomain() {
@@ -23,11 +25,11 @@ add_action('init', 'sfb_load_textdomain');
 // Enqueue scripts and styles
 function sfb_enqueue_scripts() {
     wp_enqueue_script('jquery');
-    wp_enqueue_script('sfb-script', plugin_dir_url(__FILE__) . 'sfb-script.js', array('jquery'), null, true);
+    wp_enqueue_script('sfb-script', plugin_dir_url(__FILE__) . 'js/sfb-script.js', array('jquery'), null, true);
     wp_localize_script('sfb-script', 'sfb_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php')
     ));
-    wp_enqueue_style('sfb-style', plugin_dir_url(__FILE__) . 'sfb-style.css');
+    wp_enqueue_style('sfb-style', plugin_dir_url(__FILE__) . 'css/sfb-style.css');
 }
 add_action('wp_enqueue_scripts', 'sfb_enqueue_scripts');
 
@@ -40,7 +42,8 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
   // Shortcode attributes with default value for 'taxonomy'
   $atts = shortcode_atts(array(
     'taxonomy' => '',
-    'items_per_page' => DEFAULT_ITEMS_PER_PAGE,
+    'posts_per_page' => DEFAULT_NUM_POSTS_PER_PAGE,
+    'taxonomy_terms_per_page' => DEFAULT_NUM_TERMS_PER_PAGE,
     'display_names' => ''
   ), $atts);
 
@@ -66,14 +69,33 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
   }
   ob_start();
     ?>
-    <div class="sermon-filter-buttons">
-      <button class="sermon-filter-button active" data-filter="recent"><?php esc_html_e('Recent', 'sermon-filter-plugin'); ?></button>
-      <!-- <button class="sermon-filter-button active" data-filter="recent">Recent</button> -->
-        <!-- <button class="sermon-filter-button" data-filter="speaker">Speaker</button>
-        <button class="sermon-filter-button" data-filter="scripture">Scriptures</button> -->
-        <?php foreach ($taxonomy_display_names as $taxonomy => $display_name) : ?>
-            <button class="sermon-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php echo esc_html($display_name); ?></button>
-        <?php endforeach; ?>
+    <div class="sermon-filter-buttons-container">
+      <div class="sermon-filter-buttons">
+        <button class="sermon-filter-button active" data-filter="recent"><?php esc_html_e('Recent', 'sermon-filter-plugin'); ?></button>
+        <!-- <button class="sermon-filter-button active" data-filter="recent">Recent</button> -->
+          <!-- <button class="sermon-filter-button" data-filter="speaker">Speaker</button>
+          <button class="sermon-filter-button" data-filter="scripture">Scriptures</button> -->
+          <?php foreach ($taxonomy_display_names as $taxonomy => $display_name) : ?>
+              <button class="sermon-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php echo esc_html($display_name); ?></button>
+          <?php endforeach; ?>
+      </div>
+      <div class="sermon-search-bar">
+          <input type="text" id="sermon-search-input" placeholder="<?php esc_attr_e('Search...', 'sermon-filter-plugin'); ?>">
+          <!-- <button id="sermon-search-button"><?php esc_html_e('Search', 'sermon-filter-plugin'); ?></button> -->
+          <div id="sermon-search-button" class="sermon-search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" id="icon" width="20" height="20" viewBox="0 0 32 32">
+              <defs>
+                <style>
+                  .cls-1 {
+                    fill: none;
+                  }
+                </style>
+              </defs>
+              <path d="M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z" transform="translate(0 0)"/>
+              <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
+            </svg>
+          </div>
+      </div>
     </div>
     <div class="sermon-filter-results"></div>
     <?php
@@ -81,18 +103,52 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
 }
 add_shortcode('sermon_filter_buttons', 'sfb_generate_filter_buttons_shortcode');
 
+
+// Define a function to split blocks into two parts
+function split_content_blocks($blocks) {
+    $video_block = '';
+    // $remaining_blocks = [];
+
+    foreach ($blocks as $block) {
+        // Check if the block type is an embed
+        if ($block['blockName'] === 'core/embed' && !empty($block['attrs']['url'])) {
+            $video_block = apply_filters('the_content', render_block($block)); // Get the rendered block content
+            break; // Stop after finding the first video block
+        // } else {
+        //     $remaining_blocks[] = $block; // Collect remaining blocks
+        }
+    }
+
+    return $video_block;
+    // return [
+    //     'video' => $video_block,
+    //     'remaining' => $remaining_blocks
+    // ];
+}
+
+
 // Handle AJAX requests
 function sfb_handle_ajax_request() {
     $filter = isset($_POST['filter']) ? sanitize_text_field($_POST['filter']) : '';
     $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
-    // $taxonomy = isset($_POST['taxonomy']) ? sanitize_text_field($_POST['taxonomy']) : '';
     $taxonomy = isset($_POST['taxonomy']) ? sanitize_title($_POST['taxonomy']) : '';
+    $search_query = isset($_POST['search_query']) ? sanitize_text_field($_POST['search_query']) : '';
+
 error_log('$_POST : ' . print_r($_POST['taxonomy'], true));
 error_log('$taxonomy : ' . print_r(sanitize_title($_POST['taxonomy']), true));
     $shortcode_atts = get_option('sfb_shortcode_atts');
-    // Use $shortcode_atts['taxonomy'] and $shortcode_atts['items_per_page'] in your logic
-    $post_per_page = $shortcode_atts['items_per_page'];
-    if ($filter == 'recent' || $filter == '') {
+    // Use $shortcode_atts['taxonomy'] and $shortcode_atts['posts_per_page'] in your logic
+    $post_per_page = $shortcode_atts['posts_per_page'];
+    $taxonomy_terms_per_page = $shortcode_atts['taxonomy_terms_per_page'];
+
+    if ($filter == 'search' /*&& !empty($search_query)*/) {
+      $args = array(
+          'post_type' => 'sermon',
+          'posts_per_page' => $posts_per_page,
+          'paged' => $paged,
+          's' => $search_query
+      );
+    } elseif ($filter == 'recent' || $filter == '') {
         $args = array(
             'post_type' => 'sermon',
             'posts_per_page' => $post_per_page,
@@ -119,7 +175,7 @@ error_log('$taxonomy : ' . print_r(sanitize_title($_POST['taxonomy']), true));
                 'taxonomy'   => $filter,
                 'hide_empty' => true,
                 'parent'     => 0,
-                'number'     => $post_per_page,
+                'number'     => $taxonomy_terms_per_page,
                 'offset'     => ($paged - 1) * $post_per_page,
             );
             $terms = get_terms($args);
@@ -136,16 +192,31 @@ error_log('$taxonomy : ' . print_r(sanitize_title($_POST['taxonomy']), true));
 add_action('wp_ajax_sfb_filter', 'sfb_handle_ajax_request');
 add_action('wp_ajax_nopriv_sfb_filter', 'sfb_handle_ajax_request');
 
+// function display_sermons($query, $filter, $taxonomy) {
+//   echo '<div class="sermon-results-container" data-filter="' . esc_attr($filter) . '" data-taxonomy="' . esc_attr($taxonomy) . '">';
+//   if ($query->have_posts()) {
+//       while ($query->have_posts()) {
+//           $query->the_post();
+//           include plugin_dir_path(__FILE__) . 'sermon-template.php';
+//       }
+//       display_pagination($query->max_num_pages);
+//   } else {
+//     esc_html_e('No results found.', 'sermon-filter-plugin');
+//   }
+//   wp_reset_postdata();
+// }
 function display_sermons($query, $filter, $taxonomy) {
   echo '<div class="sermon-results-container" data-filter="' . esc_attr($filter) . '" data-taxonomy="' . esc_attr($taxonomy) . '">';
   if ($query->have_posts()) {
+      echo '<div class="sfb-sermons-grid">'; // Add a container for the grid
       while ($query->have_posts()) {
           $query->the_post();
           include plugin_dir_path(__FILE__) . 'sermon-template.php';
       }
+      echo '</div>'; // Close the container
       display_pagination($query->max_num_pages);
   } else {
-    esc_html_e('No results found.', 'sermon-filter-plugin');
+      esc_html_e('No results found.', 'sermon-filter-plugin');
   }
   wp_reset_postdata();
 }
@@ -155,13 +226,14 @@ function display_taxonomies($taxonomies, $taxonomy_name) {
         echo '<ul class="taxonomy-list">';
         foreach ($taxonomies as $taxonomy) {
             $term_count = $taxonomy->count;
-            echo '<li class="child-taxonomy-link" data-taxonomy="' . esc_attr($taxonomy->slug) . '">'
-                . $taxonomy->name 
-                . ' (' . $term_count . ')'
-                . ' <span class="arrow">&#9654;</span>' // Unicode for a right arrow
-                . '</li>';
+            echo '<li class="child-taxonomy-link" data-taxonomy="' . esc_attr($taxonomy->slug) . '">';
+            echo '<div class="term-name">' . $taxonomy->name . '</div>';
+            echo '<div class="term-count-arrow">';
+            echo '<div class="term-count">' . $term_count . '</div>';
+            echo '<div class="arrow">&#9654;</div>'; // Unicode for a right arrow
+            echo '</div>';
+            echo '</li>';
         }
-        echo '</ul>';
         display_taxonomy_pagination($taxonomy_name);
     } else {
       esc_html_e('No results found.', 'sermon-filter-plugin');
@@ -198,6 +270,8 @@ function display_pagination($max_num_pages) {
       'current' => max(1, intval($_POST['paged'])),
       'total' => $max_num_pages,
       'type' => 'array',
+      'prev_text' => '&lt;', // < symbol
+      'next_text' => '&gt;', // > symbol
   ));
 
   if ($pagination) {
@@ -208,8 +282,8 @@ function display_pagination($max_num_pages) {
 function display_taxonomy_pagination($taxonomy_name) {
   $total_taxonomies = wp_count_terms($taxonomy_name, array('parent' => 0, 'hide_empty' => true));
   $shortcode_atts = get_option('sfb_shortcode_atts');
-  // Use $shortcode_atts['taxonomy'] and $shortcode_atts['items_per_page'] in your logic
-  $post_per_page = $shortcode_atts['items_per_page'];
+  // Use $shortcode_atts['taxonomy'] and $shortcode_atts['posts_per_page'] in your logic
+  $post_per_page = $shortcode_atts['posts_per_page'];
   $total_pages = ceil($total_taxonomies / $post_per_page);
   $currentPage = intval($_POST['paged']);
   if ($total_pages > 1) {
@@ -219,6 +293,8 @@ function display_taxonomy_pagination($taxonomy_name) {
           'current' => max(1, intval($_POST['paged'])),
           'total' => $total_pages,
           'type' => 'array',
+          'prev_text' => '&lt;', // < symbol
+          'next_text' => '&gt;', // > symbol
       ));
 
       if ($pagination) {
