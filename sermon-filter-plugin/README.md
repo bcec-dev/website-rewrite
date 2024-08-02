@@ -46,3 +46,5 @@ The plugin includes support for translations. You can translate the plugin into 
 
 This plugin is licensed under the GPLv2 or later.
 
+
+
