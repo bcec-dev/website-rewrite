@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Create plugin directory for the build
       run: mkdir -p build/sermon-filter-plugin
@@ -23,10 +23,10 @@ jobs:
       run: cp -r sermon-filter-plugin/* build/sermon-filter-plugin/
 
     - name: Zip plugin files
-      run: cd build && zip -r plugin.zip sermon-filter-plugin
+      run: cd build && zip -r sermon-filter-plugin.zip sermon-filter-plugin
 
     - name: Upload plugin zip
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
-        name: plugin
-        path: build/plugin.zip
+        name: sermon-filter-plugin
+        path: build/sermon-filter-plugin.zip
