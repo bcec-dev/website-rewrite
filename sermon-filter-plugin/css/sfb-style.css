@@ -1,0 +1,49 @@
+.sermon-filter-buttons-container {
+  display: flex;
+
+  .sermon-search-bar {
+    margin-left: 20px;
+    display: flex;
+    height: 34px;
+    position: relative;
+
+    #sermon-search-input {
+      border-radius: 5px;
+      font-size: 14px;
+      padding: 7px 10px;
+    }
+    .sermon-search-icon {
+      position: absolute;
+      right: 0;
+      top: 7px;
+      cursor: pointer;
+    }
+  }
+}
+
+.sermon-filter-buttons {
+  margin-bottom: 20px;
+}
+
+.sermon-filter-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.sermon-filter-button:hover {
+  background-color: #0056b3;
+}
+
+.sermon-filter-button.active {
+  background-color: #0056b3;
+}
+
+.sermon-filter-results {
+  margin-top: 20px;
+}
