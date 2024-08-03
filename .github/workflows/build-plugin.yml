@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: sermon-filter-plugin
-        path: sermon-filter-plugin.zip
+        path: sermon-filter-plugin/**
