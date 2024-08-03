@@ -23,8 +23,7 @@ jobs:
 
     - name: Zip Plugin Files
       run: |
-        cd sermon-filter-plugin
-        zip -r ../sermon-filter-plugin.zip . -x '*.git*' -x 'node_modules/**' -x 'vendor/**'
+        zip -r sermon-filter-plugin.zip sermon-filter-plugin -x '*.git*' -x 'node_modules/**' -x 'vendor/**'
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
