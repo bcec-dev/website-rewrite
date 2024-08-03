@@ -16,14 +16,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Zip plugin files
-      run: |
-        cd sermon-filter-plugin
-        zip -r ../sermon-filter-plugin.zip .
+    - name: Create plugin directory for the build
+      run: mkdir -p build/sermon-filter-plugin
+
+    - name: Copy plugin files
+      run: cp -r sermon-filter-plugin/* build/sermon-filter-plugin/
 
     - name: Upload plugin zip
       uses: actions/upload-artifact@v4
       with:
         name: sermon-filter-plugin.zip
         path: |
-          ./sermon-filter-plugin
+          build
