@@ -22,7 +22,8 @@ jobs:
         zip -r ../sermon-filter-plugin.zip .
 
     - name: Upload plugin zip
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: sermon-filter-plugin
-        path: sermon-filter-plugin/**
+        name: sermon-filter-plugin.zip
+        path: |
+          ./sermon-filter-plugin
