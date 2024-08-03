@@ -23,7 +23,7 @@ jobs:
       run: cp -r sermon-filter-plugin/* build/sermon-filter-plugin/
 
     - name: Zip plugin files
-      run: cd build && zip -r sermon-filter-plugin.zip sermon-filter-plugin
+      run: cd build && zip -r sermon-filter-plugin.zip .
 
     - name: Upload plugin zip
       uses: actions/upload-artifact@v4
