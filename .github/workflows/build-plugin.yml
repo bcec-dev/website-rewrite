@@ -25,6 +25,6 @@ jobs:
     - name: Upload plugin zip
       uses: actions/upload-artifact@v4
       with:
-        name: sermon-filter-plugin.zip
+        name: sermon-filter-plugin
         path: |
           build
