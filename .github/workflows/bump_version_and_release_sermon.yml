@@ -1,0 +1,79 @@
+name: Bump version and release sermon-filter-plugin
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.bump_version_step.outputs.new_version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current plugin version
+        id: get_version
+        run: |
+          PLUGIN_FILE="sermon-filter-plugin/sermon-filter-plugin.php"
+          CURRENT_VERSION=$(grep -oP "(?<=define\('SFB_VERSION', ')\d+\.\d+\.\d+" "$PLUGIN_FILE")
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Bump version number
+        id: bump_version_step
+        run: |
+          PLUGIN_FILE="sermon-filter-plugin/sermon-filter-plugin.php"
+          CURRENT_VERSION="${{ env.current_version }}"
+          IFS='.' read -r -a PARTS <<< "$CURRENT_VERSION"
+          NEW_VERSION="${PARTS[0]}.${PARTS[1]}.$((PARTS[2]+1))"
+          sed -i "s/define('SFB_VERSION', '$CURRENT_VERSION')/define('SFB_VERSION', '$NEW_VERSION')/" "$PLUGIN_FILE"
+          sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/" "$PLUGIN_FILE"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add sermon-filter-plugin/sermon-filter-plugin.php
+          git commit -m "Bump version to ${{ env.new_version }}"
+          git push
+
+          
+  create_release:
+    needs: bump_version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history to get the latest commit
+
+      - name: Ensure latest commit
+        run: git pull origin main
+
+      - name: Build plugin ZIP
+        run: |
+          mkdir build
+          zip -r build/sermon-filter-plugin.zip sermon-filter-plugin
+  
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ needs.bump_version.outputs.new_version }}"
+          release_name: "v${{ needs.bump_version.outputs.new_version }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload ZIP to Release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/sermon-filter-plugin.zip
+          asset_name: sermon-filter-plugin.zip
+          asset_content_type: application/zip
