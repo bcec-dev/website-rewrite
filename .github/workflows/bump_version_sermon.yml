@@ -10,19 +10,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Bump version number
+      - name: Get current plugin version
+        id: get_version
         run: |
-          # Example: script or command to bump version number
-          ./bump_version_sermon-filter-plugin.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+          PLUGIN_FILE="sermon-filter-plugin/sermon-filter-plugin.php"
+          CURRENT_VERSION=$(grep -oP "(?<=define\('SFB_VERSION', ')\d+\.\d+\.\d+" "$PLUGIN_FILE")
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: Bump version number
+        id: bump_version_step
+        run: |
+          PLUGIN_FILE="sermon-filter-plugin/sermon-filter-plugin.php"
+          CURRENT_VERSION="${{ env.current_version }}"
+          IFS='.' read -r -a PARTS <<< "$CURRENT_VERSION"
+          NEW_VERSION="${PARTS[0]}.${PARTS[1]}.$((PARTS[2]+1))"
+          sed -i "s/define('SFB_VERSION', '$CURRENT_VERSION')/define('SFB_VERSION', '$NEW_VERSION')/" "$PLUGIN_FILE"
+          sed -i "s/Version: $CURRENT_VERSION/Version: $NEW_VERSION/" "$PLUGIN_FILE"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Commit changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "Bump version number"
+          git commit -m "Bump version to ${{ env.new_version }}"
           git push
 
 
