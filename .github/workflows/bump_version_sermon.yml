@@ -1,4 +1,4 @@
-name: Manual Release and Build Sermon Filter Plugin
+name: Manual bump version for Sermon Filter Plugin
 
 on:
   workflow_dispatch:
