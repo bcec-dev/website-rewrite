@@ -1,0 +1,40 @@
+name: Manual Release and Build Sermon Filter Plugin
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Bump version number
+        run: |
+          # Example: script or command to bump version number
+          ./bump_version_sermon-filter-plugin.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "Bump version number"
+          git push
+
+
+      - name: Create plugin directory for the build
+        run: mkdir -p build/sermon-filter-plugin
+
+      - name: Copy plugin files
+        run: cp -r sermon-filter-plugin/* build/sermon-filter-plugin/
+
+      - name: Upload plugin zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: sermon-filter-plugin
+          path: build
+          
