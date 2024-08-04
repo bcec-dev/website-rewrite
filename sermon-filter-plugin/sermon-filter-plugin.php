@@ -2,7 +2,7 @@
 /*
 Plugin Name: Sermon Filter Plugin
 Description: Adds filter buttons for recent, speaker, and scripture on sermon post type.
-Version: 1.0
+Version: 1.0.1
 Author: Wai Ho Chan
 Text Domain: sermon-filter-plugin
 Domain Path: /languages
