@@ -7,9 +7,10 @@ Author: Wai Ho Chan
 Text Domain: sermon-filter-plugin
 Domain Path: /languages
 */
-
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
+define('SFB_VERSION', '1.0.1');
+
 // Define the default number of posts per page
 define('DEFAULT_NUM_POSTS_PER_PAGE', 6);
 // Define the default number terms per page
@@ -24,11 +25,11 @@ add_action('init', 'sfb_load_textdomain');
 // Enqueue scripts and styles
 function sfb_enqueue_scripts() {
     wp_enqueue_script('jquery');
-    wp_enqueue_script('sfb-script', plugin_dir_url(__FILE__) . 'js/sfb-script.js', array('jquery'), null, true);
+    wp_enqueue_script('sfb-script', plugin_dir_url(__FILE__) . 'js/sfb-script.js', array('jquery'), SFB_VERSION, true);
     wp_localize_script('sfb-script', 'sfb_ajax', array(
         'ajax_url' => admin_url('admin-ajax.php')
     ));
-    wp_enqueue_style('sfb-style', plugin_dir_url(__FILE__) . 'css/sfb-style.css');
+    wp_enqueue_style('sfb-style', plugin_dir_url(__FILE__) . 'css/sfb-style.css', array(), SFB_VERSION);
 }
 add_action('wp_enqueue_scripts', 'sfb_enqueue_scripts');
 
