@@ -2,14 +2,14 @@
 /*
 Plugin Name: Sermon Filter Plugin
 Description: Adds filter buttons for recent, speaker, and scripture on sermon post type.
-Version: 1.0.1
+Version: 1.0.2
 Author: Wai Ho Chan
 Text Domain: sermon-filter-plugin
 Domain Path: /languages
 */
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
-define('SFB_VERSION', '1.0.1');
+define('SFB_VERSION', '1.0.2');
 
 // Define the default number of posts per page
 define('DEFAULT_NUM_POSTS_PER_PAGE', 6);
