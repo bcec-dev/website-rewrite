@@ -57,5 +57,11 @@ jQuery(document).ready(function ($) {
       }
       loadFilteredResults(filter, page, taxonomy);
     });
+
+    $(document).on('click', '.sfb-child-taxonomy-link', function () {
+      var taxonomy = $(this).data('taxonomy');
+      var filter = $('.sfb-filter-button.active').data('filter');
+      loadFilteredResults(filter, 1, taxonomy);
+    });
   }
 });

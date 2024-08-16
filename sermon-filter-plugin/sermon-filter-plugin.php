@@ -117,7 +117,33 @@ function sfb_handle_ajax_request() {
         'orderby' => 'date',
         'order' => 'DESC'
     );
-  }
+  } else {
+    if ($taxonomy) {
+        $args = array(
+            'post_type' => 'sermon',
+            'posts_per_page' => $posts_per_page,
+            'paged' => $paged,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => $filter,
+                    'field'    => 'slug',
+                    'terms'    => $taxonomy,
+                ),
+            ),
+        );
+    } else {
+        $args = array(
+            'taxonomy'   => $filter,
+            'hide_empty' => true,
+            'parent'     => 0,
+            'number'     => $taxonomy_terms_per_page,
+            'offset'     => ($paged - 1) * $posts_per_page,
+        );
+        $terms = get_terms($args);
+        display_taxonomies($terms, $filter);
+        wp_die();
+    }
+}
     
   $query = new WP_Query($args);
   display_sermons($query, $filter, $taxonomy);
@@ -182,4 +208,98 @@ function display_sermons($query, $filter, $taxonomy) {
   }
   wp_reset_postdata();
 }
+
+function display_taxonomy_pagination($taxonomy_name) {
+  $total_taxonomies = wp_count_terms($taxonomy_name, array('parent' => 0, 'hide_empty' => true));
+  $shortcode_atts = get_option('sfb_shortcode_atts');
+  $posts_per_page = $shortcode_atts['posts_per_page'];
+  $total_pages = ceil($total_taxonomies / $posts_per_page);
+  $currentPage = intval($_POST['paged']);
+  if ($total_pages > 1) {
+      $pagination = paginate_links(array(
+          'base' => '%_%',
+          'format' => '#page=%#%',
+          'current' => max(1, intval($_POST['paged'])),
+          'total' => $total_pages,
+          'type' => 'array',
+          'prev_text' => '&lt;', // < symbol
+          'next_text' => '&gt;', // > symbol
+      ));
+
+      if ($pagination) {
+        generatePaginationButtons($pagination, $currentPage);
+      }
+  }
+}
+
+function display_taxonomies($taxonomies, $taxonomy_name) {
+  if (!empty($taxonomies)) {
+      echo '<ul class="sfb-taxonomy-list">';
+      foreach ($taxonomies as $taxonomy) {
+          $term_count = $taxonomy->count;
+          echo '<li class="sfb-child-taxonomy-link" data-taxonomy="' . esc_attr($taxonomy->slug) . '">';
+          echo '<div class="sfb-term-name">' . $taxonomy->name . '</div>';
+          echo '<div class="sfb-term-count-arrow">';
+          echo '<div class="sfb-term-count">' . $term_count . '</div>';
+          echo '<div class="sfb-term-arrow">&#9654;</div>'; // Unicode for a right arrow
+          echo '</div>';
+          echo '</li>';
+      }
+      display_taxonomy_pagination($taxonomy_name);
+  } else {
+    esc_html_e('No results found.', 'sermon-filter-plugin');
+  }
+}
+
+// Special sorting Terms for custom taxonomy: scripture and speaker
+// if it sort by 'Name', then change it to sort by 'slug'
+function custom_sort_terms_admin( $terms, $taxonomies, $args ) {
+  $custom_taxonomies = array( 'scripture', 'speaker' );
+
+  if ( array_intersect( $taxonomies, $custom_taxonomies ) && isset( $args['orderby'] ) && $args['orderby'] == 'name' ) {
+      $order = isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ? -1 : 1;
+
+      usort( $terms, function( $a, $b ) use ( $order ) {
+          error_log('$a: ' . print_r($a, true));
+          error_log('$b: ' . print_r($b, true));
+          return $order * strcmp( $a->slug, $b->slug ); // Sort by slug with the correct order
+      });
+  }
+  return $terms;
+}
+add_filter( 'get_terms', 'custom_sort_terms_admin', 10, 3 );
+
+// Shortcode to display embeded video from sermon_video_url field
+// it is used in page template for displaying sermon.
+function sfb_video_shortcode() {
+  global $post;
+  // Make sure we're dealing with a sermon post type
+  if ( $post && $post->post_type === 'sermon' ) {
+    // Get the video URL custom field
+    $video_url = get_field('sermon_video_url', $post->ID);
+
+    if ( $video_url ) {
+      $video_iframe =
+        '<div class="sfb-sermon-embed-video">'
+        . $video_url
+        . '</div>';
+      return $video_iframe;
+    }
+  }
+  return '';
+}
+add_shortcode( 'sermon_video', 'sfb_video_shortcode' );
+
+// found from GreenShiftWP to ensure that shortcodes within 
+// a query loop get rendered with the correct post data. Adding this filter
+// will ensure that any shortcode used in a query loop is properly executed
+// within the context of each post being looped over.
+function greenshift_render_block_core_shortcode( $content, $parsed_block, $block ) {
+  // Replace <p> tags around the [sermon_video] shortcode before processing
+  $content = preg_replace( '/<p>(\[sermon_video.*?\])<\/p>/s', '$1', $content );
+  $content = do_shortcode( $content );
+  return $content;
+}
+add_filter( 'render_block_core/shortcode', 'greenshift_render_block_core_shortcode', 10, 3, );
+
 ?>
