@@ -137,7 +137,7 @@ function sfb_handle_ajax_request() {
             'hide_empty' => true,
             'parent'     => 0,
             'number'     => $taxonomy_terms_per_page,
-            'offset'     => ($paged - 1) * $posts_per_page,
+            'offset'     => ($paged - 1) * $taxonomy_terms_per_page,
         );
         $terms = get_terms($args);
         display_taxonomies($terms, $filter);
@@ -212,8 +212,8 @@ function display_sermons($query, $filter, $taxonomy) {
 function display_taxonomy_pagination($taxonomy_name) {
   $total_taxonomies = wp_count_terms($taxonomy_name, array('parent' => 0, 'hide_empty' => true));
   $shortcode_atts = get_option('sfb_shortcode_atts');
-  $posts_per_page = $shortcode_atts['posts_per_page'];
-  $total_pages = ceil($total_taxonomies / $posts_per_page);
+  $taxonomy_terms_per_page = $shortcode_atts['taxonomy_terms_per_page'];
+  $total_pages = ceil($total_taxonomies / $taxonomy_terms_per_page);
   $currentPage = intval($_POST['paged']);
   if ($total_pages > 1) {
       $pagination = paginate_links(array(
