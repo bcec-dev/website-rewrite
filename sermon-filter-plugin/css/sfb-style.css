@@ -163,3 +163,37 @@
   text-align: right;
 }
 
+.sfb-container {
+  position: relative;
+}
+
+/*
+  Spinner while loading data
+*/
+.sfb-spinner {
+  display: none;
+  width: 50px;
+  height: 50px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 110px;
+  left: calc(50% - 42px);
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Ensure spinner is on top */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.sfb-loading .sfb-spinner {
+  display: block;
+}
+
+.sfb-loading .sfb-results-container {
+  opacity: 0.3;
+}

@@ -6,6 +6,9 @@ jQuery(document).ready(function ($) {
   // Check if the sermon filter buttons are present on the page
   if ($('.sfb-buttons-group').length > 0) {
     function loadFilteredResults(filter, paged = 1, taxonomy = '', searchQuery = '') {
+      // Show spinner
+      $('.sfb-container').addClass('sfb-loading');
+
       $.ajax({
         url: sfb_ajax.ajax_url,
         type: 'POST',
@@ -22,6 +25,12 @@ jQuery(document).ready(function ($) {
             currentPage = paged;  // Store the current page of the speaker list
             currentFilter = filter;
           }
+          // Hide spinner
+          $('.sfb-container').removeClass('sfb-loading');
+        },
+        error: function () {
+          // Hide spinner on error
+          $('.sfb-container').removeClass('sfb-loading');
         }
       });
     }
