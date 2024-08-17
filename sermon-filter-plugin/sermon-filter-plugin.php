@@ -68,31 +68,34 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
   }
   ob_start();
     ?>
-    <div class="sfb-actions-container">
-      <div class="sfb-buttons-group">
-        <button class="sfb-filter-button active" data-filter="recent"><?php esc_html_e('Recent', 'sermon-filter-plugin'); ?></button>
-        <?php foreach ($taxonomy_display_names as $taxonomy => $display_name) : ?>
-            <button class="sfb-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php echo esc_html($display_name); ?></button>
-        <?php endforeach; ?>
+    <div class="sfb-container">
+      <div class="sfb-actions-container">
+        <div class="sfb-buttons-group">
+          <button class="sfb-filter-button active" data-filter="recent"><?php esc_html_e('Recent', 'sermon-filter-plugin'); ?></button>
+          <?php foreach ($taxonomy_display_names as $taxonomy => $display_name) : ?>
+              <button class="sfb-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php echo esc_html($display_name); ?></button>
+          <?php endforeach; ?>
+        </div>
+        <div class="sfb-search-bar">
+            <input type="text" class="sfb-search-input" placeholder="<?php esc_attr_e('Search...', 'sermon-filter-plugin'); ?>">
+            <div class="sfb-search-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" id="icon" width="20" height="20" viewBox="0 0 32 32">
+                <defs>
+                  <style>
+                    .cls-1 {
+                      fill: none;
+                    }
+                  </style>
+                </defs>
+                <path d="M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z" transform="translate(0 0)"/>
+                <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
+              </svg>
+            </div>
+        </div>
       </div>
-      <div class="sfb-search-bar">
-          <input type="text" class="sfb-search-input" placeholder="<?php esc_attr_e('Search...', 'sermon-filter-plugin'); ?>">
-          <div class="sfb-search-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" id="icon" width="20" height="20" viewBox="0 0 32 32">
-              <defs>
-                <style>
-                  .cls-1 {
-                    fill: none;
-                  }
-                </style>
-              </defs>
-              <path d="M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z" transform="translate(0 0)"/>
-              <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
-            </svg>
-          </div>
-      </div>
+      <div class="sfb-spinner"></div>
+      <div class="sfb-results-container"></div>
     </div>
-    <div class="sfb-results-container"></div>
     <?php
     return ob_get_clean();
 }
