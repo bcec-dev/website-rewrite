@@ -1,0 +1,51 @@
+# Copyright (C) 2024 Wai Ho Chan
+# This file is distributed under the same license as the Sermon Filter Plugin plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Sermon Filter Plugin 1.0.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/sermon-filter-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-29T17:11:20+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: sermon-filter-plugin\n"
+
+#. Plugin Name of the plugin
+#: sermon-filter-plugin.php
+msgid "Sermon Filter Plugin"
+msgstr ""
+
+#. Description of the plugin
+#: sermon-filter-plugin.php
+msgid "Adds filter buttons for recent, speaker, and scripture on sermon post type."
+msgstr ""
+
+#. Author of the plugin
+#: sermon-filter-plugin.php
+msgid "Wai Ho Chan"
+msgstr ""
+
+#: sermon-filter-plugin.php:59
+msgid "Speaker"
+msgstr ""
+
+#: sermon-filter-plugin.php:60
+msgid "Scripture"
+msgstr ""
+
+#: sermon-filter-plugin.php:78
+msgid "Recent"
+msgstr ""
+
+#: sermon-filter-plugin.php:84
+msgid "Search..."
+msgstr ""
+
+#: sermon-filter-plugin.php:214
+#: sermon-filter-plugin.php:257
+msgid "No results found."
+msgstr ""
