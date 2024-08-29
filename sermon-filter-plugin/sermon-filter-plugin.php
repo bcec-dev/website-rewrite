@@ -77,7 +77,7 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
         <div class="sfb-buttons-group">
           <button class="sfb-filter-button active" data-filter="recent"><?php esc_html_e('Recent', 'sermon-filter-plugin'); ?></button>
           <?php foreach ($taxonomy_display_names as $taxonomy => $display_name) : ?>
-              <button class="sfb-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php echo esc_html($display_name); ?></button>
+              <button class="sfb-filter-button" data-filter="<?php echo esc_attr($taxonomy); ?>"><?php esc_html_e($display_name, 'sermon-filter-plugin'); ?></button>
           <?php endforeach; ?>
         </div>
         <div class="sfb-search-bar">
