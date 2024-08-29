@@ -55,6 +55,10 @@ function sfb_generate_filter_buttons_shortcode($atts = []) {
   // Parse the display_names attribute into an array
   $display_names = array_map('trim', explode(',', $atts['display_names']));
 
+  // add these for translating the 'speaker' and 'scripture' text
+  $speakerTranslation = esc_html_e('Speaker', 'sermon-filter-plugin');
+  $scriptureTranslation = esc_html_e('Scripture', 'sermon-filter-plugin');
+  
   // Combine taxonomies and display names into an associative array
   $taxonomy_display_names = array();
   foreach ($taxonomies as $index => $taxonomy) {
