@@ -47,6 +47,8 @@ jQuery(document).ready(function ($) {
       }
       $('.sfb-filter-button').removeClass('active');
       $(this).addClass('active');
+      // empty the search field
+      $('.sfb-search-input').val('');
       loadFilteredResults(filter, paged);
     });
 
@@ -56,21 +58,43 @@ jQuery(document).ready(function ($) {
       var sermonResultContainer = $('.sfb-sermons-grid-container');
       var filter = '';
       var taxonomy = '';
+      var searchQuery = '';
       if (sermonResultContainer.length > 0) {
         // if sermon posts are displayed.
-        // get the filter and taxonomy info from the container
+        // get the filter, taxonomy and search query info from the container
         filter = $('.sfb-sermons-grid-container').data('filter');
         taxonomy = $('.sfb-sermons-grid-container').data('taxonomy');
+        searchQuery = $('.sfb-sermons-grid-container').data('searchquery');
       } else {
         filter = $('.sfb-filter-button.active').data('filter');
       }
-      loadFilteredResults(filter, page, taxonomy);
+      loadFilteredResults(filter, page, taxonomy, searchQuery);
     });
 
     $(document).on('click', '.sfb-child-taxonomy-link', function () {
       var taxonomy = $(this).data('taxonomy');
       var filter = $('.sfb-filter-button.active').data('filter');
       loadFilteredResults(filter, 1, taxonomy);
+    });
+
+    // Function to handle the search action
+    function handleSearch() {
+      $('.sfb-filter-button').removeClass('active');
+      var searchQuery = $('.sfb-search-input').val();
+      loadFilteredResults('search', 1, '', searchQuery);
+    }
+
+    // Handler for search button click
+    $('.sfb-search-icon').on('click', function () {
+      handleSearch();
+    });
+
+    // Handler for search keydown
+    $('.sfb-search-input').on('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent the default form submission
+        handleSearch();
+      }
     });
   }
 });

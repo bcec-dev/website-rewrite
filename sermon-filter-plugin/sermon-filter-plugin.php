@@ -107,6 +107,7 @@ add_shortcode('sermon_filter_buttons', 'sfb_generate_filter_buttons_shortcode');
 
 // Handle AJAX requests
 function sfb_handle_ajax_request() {
+  global $wpdb;
   $filter = isset($_POST['filter']) ? sanitize_text_field($_POST['filter']) : '';
   $paged = isset($_POST['paged']) ? intval($_POST['paged']) : 1;
   $taxonomy = isset($_POST['taxonomy']) ? sanitize_title($_POST['taxonomy']) : '';
@@ -116,7 +117,45 @@ function sfb_handle_ajax_request() {
   $posts_per_page = $shortcode_atts['posts_per_page'];
   $taxonomy_terms_per_page = $shortcode_atts['taxonomy_terms_per_page'];
 
-  if ($filter == 'recent') {
+  if ($filter == 'search') {
+    $keyword = '%' . $wpdb->esc_like( $search_query ) . '%';
+    // Search in all custom fields
+    $post_ids_meta = $wpdb->get_col( $wpdb->prepare( "
+      SELECT DISTINCT post_id FROM {$wpdb->postmeta}
+      WHERE meta_value LIKE '%s'
+    ", $keyword ) );
+
+    // Search in post_title and post_content
+    $post_ids_post = $wpdb->get_col( $wpdb->prepare( "
+        SELECT DISTINCT ID FROM {$wpdb->posts}
+        WHERE post_title LIKE '%s'
+        OR post_content LIKE '%s'
+    ", $keyword, $keyword ) );
+
+    // Search in custom taxonomy 'speaker'
+    $speaker_ids = $wpdb->get_col( $wpdb->prepare( "
+      SELECT DISTINCT tr.object_id FROM {$wpdb->term_relationships} AS tr
+      INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+      INNER JOIN {$wpdb->terms} AS t ON tt.term_id = t.term_id
+      WHERE tt.taxonomy = %s
+      AND t.name LIKE %s
+    ", 'speaker', $keyword ) );
+
+    $post_ids = array_merge( $post_ids_meta, $post_ids_post, $speaker_ids );
+    $post_ids = array_unique($post_ids); // Remove duplicates
+    // Query arguments
+    if (!empty($post_ids)) {
+      $args = array(
+          'post_type' => 'sermon',
+          'posts_per_page' => $posts_per_page,
+          'paged' => $paged,
+          'post_status' => 'publish',
+          'post__in'    => $post_ids,
+          'orderby' => 'date',
+          'order' => 'DESC'
+      );
+    }
+  } elseif ($filter == 'recent') {
     $args = array(
         'post_type' => 'sermon',
         'posts_per_page' => $posts_per_page,
@@ -153,7 +192,7 @@ function sfb_handle_ajax_request() {
 }
     
   $query = new WP_Query($args);
-  display_sermons($query, $filter, $taxonomy);
+  display_sermons($query, $filter, $taxonomy, $search_query);
 
 
   wp_die();
@@ -200,8 +239,8 @@ function display_pagination($max_num_pages) {
   }
 }
 
-function display_sermons($query, $filter, $taxonomy) {
-  echo '<div class="sfb-sermons-grid-container" data-filter="' . esc_attr($filter) . '" data-taxonomy="' . esc_attr($taxonomy) . '">';
+function display_sermons($query, $filter, $taxonomy, $search_query) {
+  echo '<div class="sfb-sermons-grid-container" data-filter="' . esc_attr($filter) . '" data-taxonomy="' . esc_attr($taxonomy) . '" data-searchquery="' . esc_attr($search_query) . '">';
   if ($query->have_posts()) {
       echo '<div class="sfb-sermons-grid">'; // Add a container for the grid
       while ($query->have_posts()) {
