@@ -141,7 +141,15 @@ function sfb_handle_ajax_request() {
       AND t.name LIKE %s
     ", 'speaker', $keyword ) );
 
-    $post_ids = array_merge( $post_ids_meta, $post_ids_post, $speaker_ids );
+    $scripture_ids = $wpdb->get_col( $wpdb->prepare( "
+      SELECT DISTINCT tr.object_id FROM {$wpdb->term_relationships} AS tr
+      INNER JOIN {$wpdb->term_taxonomy} AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+      INNER JOIN {$wpdb->terms} AS t ON tt.term_id = t.term_id
+      WHERE tt.taxonomy = %s
+      AND t.name LIKE %s
+    ", 'scripture', $keyword ) );
+
+    $post_ids = array_merge( $post_ids_meta, $post_ids_post, $speaker_ids, $scripture_ids );
     $post_ids = array_unique($post_ids); // Remove duplicates
     // Query arguments
     if (!empty($post_ids)) {
