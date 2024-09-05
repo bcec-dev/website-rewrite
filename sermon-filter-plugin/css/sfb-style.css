@@ -1,8 +1,10 @@
 .sfb-actions-container {
   display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 20px;
 
   .sfb-search-bar {
-    margin-left: 20px;
     display: flex;
     height: 34px;
     position: relative;
@@ -22,7 +24,9 @@
 }
 
 .sfb-buttons-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .sfb-filter-button {
@@ -34,6 +38,7 @@
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  word-break: keep-all;
 }
 
 .sfb-filter-button:hover {
