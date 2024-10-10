@@ -10,14 +10,15 @@
     position: relative;
 
     .sfb-search-input {
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 14px;
-      padding: 7px 10px;
+      padding: 8px 30px 8px 10px;
+      min-width: 216px;
     }
     .sfb-search-icon {
       position: absolute;
-      right: 0;
-      top: 7px;
+      right: 6px;
+      top: 16px;
       cursor: pointer;
     }
   }
@@ -30,15 +31,18 @@
 }
 
 .sfb-filter-button {
-  padding: 10px 20px;
+  padding: 16px 50px;
   margin-right: 10px;
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #003E7F;
   color: #ffffff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   transition: background-color 0.3s ease;
   word-break: keep-all;
+  min-width: 140px;
+  text-align: center;
+  font-size: 18px;
 }
 
 .sfb-filter-button:hover {
@@ -46,11 +50,11 @@
 }
 
 .sfb-filter-button.active {
-  background-color: #0056b3;
+  background-color: #696969;
 }
 
 .sfb-results-container {
-  margin-top: 20px;
+  margin-top: 10px;
 
   /* style for results */
   .sfb-sermons-grid {
@@ -59,19 +63,13 @@
     gap: 20px; /* Adjust the gap between items as needed */
 
     article {
-      flex: 0 0 calc(33.333% - 20px); /* 3 items per row, with gap adjustment */
+      flex: 0 0 calc(50% - 10px); /* 2 items per row, with gap adjustment */
       box-sizing: border-box;
   
-      .entry-content {
+      .sermon-content {
         margin: 0;
         padding: 0;
       }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .sfb-sermons-grid article {
-        flex: 0 0 calc(50% - 10px); /* 2 items per row on tablets */
     }
   }
 
@@ -88,16 +86,13 @@
     gap: 10px;
 
     .sfb-page-link {
-      cursor: pointer;
       padding: 5px 10px;
-      background-color: #007bff;
-      color: #ffffff;
-      border-radius: 5px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: #0056b3;
+      a {
+        color: #003E7F;
+        text-decoration: none;
+        &:hover {
+          color:#018882;
+        }
       }
     }
   }
@@ -113,16 +108,14 @@
   padding-top: 0;
   height: 0;
   margin-bottom: 0;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-radius: 16px;
   iframe {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
+      border-radius: 16px;
   }
 }
 
@@ -132,33 +125,26 @@
 .sfb-taxonomy-list {
   list-style-type: none;
   padding: 0;
+  margin-top: 0;
 }
 
 .sfb-child-taxonomy-link {
   cursor: pointer;
-  padding: 5px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  margin-bottom: 5px;
   transition: background-color 0.3s ease;
+  gap: 10px;
+  color: #003E7F;
+  border-bottom: 1px solid #003E7F;
+  padding: 20px 0px;
 }
 
 .sfb-child-taxonomy-link:hover {
-  background-color: #d0d0d0;
-}
-
-.sfb-child-taxonomy-link .sfb-term-arrow {
-  margin-left: auto;
-  font-size: 1.2em;
-  color: #007bff;
+  color: #018882;
 }
 
 .sfb-term-name {
-  flex-grow: 1;
   text-align: left;
+  flex-basis: 70%;
 }
 
 .sfb-term-count-arrow {
@@ -170,6 +156,7 @@
 
 .sfb-container {
   position: relative;
+  margin-top: 0;
 }
 
 /*
