@@ -28,7 +28,7 @@ class Sermon_Filter_Helper {
               echo '<div class="sfb-term-name">' . $taxonomy->name . '</div>';
               echo '<div class="sfb-term-count-arrow">';
               echo '<div class="sfb-term-count">' . $term_count . '</div>';
-              echo '<div class="sfb-term-arrow">&#9654;</div>'; // Unicode for a right arrow
+              echo '<div class="sfb-term-arrow">&gt;</div>';
               echo '</div>';
               echo '</li>';
           }
@@ -40,7 +40,9 @@ class Sermon_Filter_Helper {
 
   public static function generatePaginationButtons($pagination, $currentPage) {
     echo '<div class="sfb-pagination">';
-    foreach ($pagination as $page_link) {
+    $length = count($pagination); 
+    for ($i = 0; $i < $length; $i++) {
+      $page_link = $pagination[$i];
       // get page number from the $page_link
       $regex = '/#page=(\d+)/';  // Regular expression to match '#page=' followed by digits
   
@@ -51,10 +53,23 @@ class Sermon_Filter_Helper {
         $page_num = $currentPage;
       }
       $page_num = $page_num ? $page_num : 1; // Fallback to page 1 if no number found
+      
+      // for first item, if it is not a 'prev' indicator,
+      // add a disable '<' text 
+      if ($i == 0 && strpos($page_link, 'prev') == false) {
+        echo '<span class="sfb-page-link disabled"><span>&lt;</span></span>';
+      }
+
       if (strpos($page_link, 'dots') !== false ) {
         echo '<span>' . $page_link . '</span>';
       } else {
         echo '<span class="sfb-page-link" data-page="' . abs($page_num) . '">' . $page_link . '</span>';
+      }
+
+      // for last item, if it is not a 'next' indicator,
+      // add a disable '>' text 
+      if ($i == $length - 1 && strpos($page_link, 'next') == false) {
+        echo '<span class="sfb-page-link disabled"><span>&gt;</span></span>';
       }
     }
     echo '</div>';

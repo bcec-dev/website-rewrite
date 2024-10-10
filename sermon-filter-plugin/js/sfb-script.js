@@ -52,9 +52,10 @@ jQuery(document).ready(function ($) {
       loadFilteredResults(filter, paged);
     });
 
-    $(document).on('click', '.sfb-page-link', function (e) {
+    $(document).on('click', '.sfb-page-link a', function (e) {
       e.preventDefault(); // Prevent default action of <a> tag
-      var page = $(this).data('page');
+      // Get the 'page' data from the parent element of the <a> tag
+      var page = $(this).parent().data('page');
       var sermonResultContainer = $('.sfb-sermons-grid-container');
       var filter = '';
       var taxonomy = '';

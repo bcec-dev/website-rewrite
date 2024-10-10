@@ -10,7 +10,7 @@
     $speaker_names = $speakers && !is_wp_error($speakers) ? wp_list_pluck($speakers, 'name') : [];
     ?>
 
-    <div class="entry-content">
+    <div class="sermon-content">
         <?php if ($sermon_video_url) : ?>
             <!-- Display the embedded video if sermon_video_url exists -->
             <div class="sfb-sermon-embed-video">
@@ -18,7 +18,7 @@
             </div>
         <?php endif; ?>
          <!-- Display the title link and the remaining blocks -->
-         <div class="entry-title">
+         <div class="sermon-title">
             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
         </div>
         <?php if ($theme) : ?>
