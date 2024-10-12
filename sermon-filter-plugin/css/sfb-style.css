@@ -1,19 +1,21 @@
 .sfb-actions-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 10px 20px;
   padding-bottom: 20px;
 
   .sfb-search-bar {
     display: flex;
-    height: 34px;
+    height: 53px;
     position: relative;
+    flex: 1 1 min-content;
+    min-width: 130px;
 
     .sfb-search-input {
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 18px;
       padding: 8px 30px 8px 10px;
-      min-width: 216px;
+      width: 100%;
     }
     .sfb-search-icon {
       position: absolute;
@@ -24,15 +26,8 @@
   }
 }
 
-.sfb-buttons-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .sfb-filter-button {
   padding: 16px 50px;
-  margin-right: 10px;
   cursor: pointer;
   background-color: #003E7F;
   color: #ffffff;
@@ -43,6 +38,10 @@
   min-width: 140px;
   text-align: center;
   font-size: 18px;
+
+  &:last-of-type {
+    margin-right: 10px;
+  }
 }
 
 .sfb-filter-button:hover {
@@ -60,15 +59,27 @@
   .sfb-sermons-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Adjust the gap between items as needed */
+    gap: 60px 30px; /* Adjust the gap between items as needed */
 
     article {
-      flex: 0 0 calc(50% - 10px); /* 2 items per row, with gap adjustment */
+      flex: 0 0 calc(50% - 15px); /* 2 items per row, with gap adjustment */
       box-sizing: border-box;
   
       .sermon-content {
         margin: 0;
         padding: 0;
+        color: #003E7F;
+      }
+      .sermon-title {
+        margin-top: 20px;
+        a {
+          text-decoration: none;
+          color: #003E7F;
+          font-weight: bold;
+          &:hover {
+            color: #018882;
+          }
+        }
       }
     }
   }
@@ -125,17 +136,18 @@
 .sfb-taxonomy-list {
   list-style-type: none;
   padding: 0;
-  margin-top: 0;
+  margin-top: -20px;
 }
 
 .sfb-child-taxonomy-link {
   cursor: pointer;
   display: flex;
   transition: background-color 0.3s ease;
-  gap: 10px;
+  gap: 10px 20px;
   color: #003E7F;
   border-bottom: 1px solid #003E7F;
   padding: 20px 0px;
+  font-weight: 700;
 }
 
 .sfb-child-taxonomy-link:hover {
@@ -144,7 +156,7 @@
 
 .sfb-term-name {
   text-align: left;
-  flex-basis: 70%;
+  flex-basis: 66%;
 }
 
 .sfb-term-count-arrow {
