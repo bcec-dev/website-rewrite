@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
   var currentFilter = '';
   
   // Check if the sermon filter buttons are present on the page
-  if ($('.sfb-buttons-group').length > 0) {
+  if ($('.sfb-filter-button').length > 0) {
     function loadFilteredResults(filter, paged = 1, taxonomy = '', searchQuery = '') {
       // Show spinner
       $('.sfb-container').addClass('sfb-loading');

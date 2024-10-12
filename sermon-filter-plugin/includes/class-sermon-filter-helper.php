@@ -9,6 +9,11 @@ class Sermon_Filter_Helper {
           echo '<div class="sfb-sermons-grid">'; // Add a container for the grid
           while ($query->have_posts()) {
               $query->the_post();
+
+              // Make the $filter and $taxonomy variable available in the template
+              $current_filter = $filter; 
+              $current_taxonomy = $taxonomy;
+
               include plugin_dir_path(__FILE__) . '../sermon-template.php';
           }
           echo '</div>'; // Close the container
