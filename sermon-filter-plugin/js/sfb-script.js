@@ -75,6 +75,10 @@ jQuery(document).ready(function ($) {
           // Set the current values too
           currentNonTaxonomyPage = nonTaxonomyPage;
           currentFilter = filter;
+          if (searchQuery) {
+            // Set the searchQuery to the search input field
+            $('.sfb-search-input').val(searchQuery);
+          }
           return;
         }
       }
