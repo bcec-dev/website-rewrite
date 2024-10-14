@@ -1,10 +1,21 @@
 jQuery(document).ready(function ($) {
-  // Variable to store the current page and current filter type
-  var currentPage = 1;
+  // Variable to store the current page of the filtered list
+  var currentNonTaxonomyPage = 1;
   var currentFilter = '';
-  
+
   // Check if the sermon filter buttons are present on the page
   if ($('.sfb-filter-button').length > 0) {
+    function saveFilterState(filter, paged, taxonomy, searchQuery, nonTaxonomyPage) {
+      const filterState = {
+        filter: filter,
+        paged: paged,
+        taxonomy: taxonomy,
+        searchQuery: searchQuery,
+        nonTaxonomyPage: nonTaxonomyPage,
+      };
+      sessionStorage.setItem('sermonFilterState', JSON.stringify(filterState));
+    }
+    
     function loadFilteredResults(filter, paged = 1, taxonomy = '', searchQuery = '') {
       // Show spinner
       $('.sfb-container').addClass('sfb-loading');
@@ -22,11 +33,12 @@ jQuery(document).ready(function ($) {
         success: function (response) {
           $('.sfb-results-container').html(response);
           if (!taxonomy) {
-            currentPage = paged;  // Store the current page of the speaker list
+            currentNonTaxonomyPage = paged;  // Store the current page of the speaker list
             currentFilter = filter;
           }
           // Hide spinner
           $('.sfb-container').removeClass('sfb-loading');
+          saveFilterState(filter, paged, taxonomy, searchQuery, currentNonTaxonomyPage);
         },
         error: function () {
           // Hide spinner on error
@@ -35,21 +47,60 @@ jQuery(document).ready(function ($) {
       });
     }
 
-    // Load recent sermons by default
-    loadFilteredResults('recent');
-    
-    // click handler for the filter buttons
+    // Function to set the 'active' class on the corresponding filter button
+    function setActiveFilterButton(filter) {
+      // Remove the 'active' class from all buttons first
+      $('.sfb-filter-button').removeClass('active');
+
+      // Find the button that matches the filter value and add the 'active' class
+      const $activeButton = $(`.sfb-filter-button[data-filter="${filter}"]`);
+      if ($activeButton.length) {
+          $activeButton.addClass('active');
+      }
+    }
+
+    function initLoad() {
+      // Check if 'from_sermon_post' parameter is present in the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromSermonPost = urlParams.get('from_sermon_post');
+
+      if (fromSermonPost === 'true') {
+        const filterState = JSON.parse(sessionStorage.getItem('sermonFilterState'));
+        if (filterState) {
+          const { filter, paged, taxonomy, searchQuery, nonTaxonomyPage } = filterState;
+
+          loadFilteredResults(filter, paged, taxonomy, searchQuery);
+          // Set the active class on the corresponding filter button
+          setActiveFilterButton(filter);
+          // Set the current values too
+          currentNonTaxonomyPage = nonTaxonomyPage;
+          currentFilter = filter;
+          return;
+        }
+      }
+      // Load recent sermons by default
+      loadFilteredResults('recent');
+    }
+
+    initLoad();
+
     $(document).on('click', '.sfb-filter-button', function () {
       var filter = $(this).data('filter');
       var paged = 1;
       if (filter === currentFilter) {
-        paged = currentPage;
+        paged = currentNonTaxonomyPage;
       }
       $('.sfb-filter-button').removeClass('active');
       $(this).addClass('active');
       // empty the search field
       $('.sfb-search-input').val('');
       loadFilteredResults(filter, paged);
+    });
+
+    $(document).on('click', '.sfb-child-taxonomy-link', function () {
+      var taxonomy = $(this).data('taxonomy');
+      var filter = $('.sfb-filter-button.active').data('filter');
+      loadFilteredResults(filter, 1, taxonomy);
     });
 
     $(document).on('click', '.sfb-page-link a', function (e) {
@@ -70,12 +121,6 @@ jQuery(document).ready(function ($) {
         filter = $('.sfb-filter-button.active').data('filter');
       }
       loadFilteredResults(filter, page, taxonomy, searchQuery);
-    });
-
-    $(document).on('click', '.sfb-child-taxonomy-link', function () {
-      var taxonomy = $(this).data('taxonomy');
-      var filter = $('.sfb-filter-button.active').data('filter');
-      loadFilteredResults(filter, 1, taxonomy);
     });
 
     // Function to handle the search action
