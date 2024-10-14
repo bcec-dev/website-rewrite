@@ -96,14 +96,39 @@
     justify-content: center;
     gap: 10px;
 
+    .sfb-page-dots {
+      padding: 10px;
+    }
     .sfb-page-link {
-      padding: 5px 10px;
+      padding: 10px;
+
+      &:has(svg) {
+        padding: 5px 10px;
+      }        
+      
+      svg {
+        width: 33px;
+        height: 33px;
+        fill: #1d427d; 
+      }
+
       a {
         color: #003E7F;
         text-decoration: none;
         &:hover {
           color:#018882;
+
+          svg {
+            fill: #018882;
+          }
         }
+      }
+      &.disabled svg {
+        fill: #696969;
+      }
+      span.current {
+        color: #696969;
+        text-decoration: underline;
       }
     }
   }
@@ -200,4 +225,30 @@
 
 .sfb-loading .sfb-results-container {
   opacity: 0.3;
+}
+
+/* style for the "back to previous page" link */
+.sfb-back-to-previous-page {
+  a {
+    display: flex;
+    color: #003E7F;
+    border: 0;
+    outline-style: none;
+    text-decoration: none;
+
+    &:hover {
+      color: #018882;
+      svg {
+        fill: #018882;
+      }
+    }
+    .sfb-back-to-left-arrow {
+      margin-right: 20px;
+      margin-top: 4px;
+    }
+    svg {
+      fill: #003E7F;
+    }
+
+  }
 }

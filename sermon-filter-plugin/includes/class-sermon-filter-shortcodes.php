@@ -10,6 +10,7 @@ class Sermon_Filter_Shortcodes {
   public function __construct() {
     add_shortcode('sermon_filter_buttons', array($this, 'generate_filter_buttons_shortcode'));
     add_shortcode('sermon_video', array($this, 'video_shortcode'));
+    add_shortcode('sermon_back_to_previous_page', array($this, 'back_to_previous_page_shortcode'));
     add_filter('render_block_core/shortcode', array($this, 'greenshift_render_block_core_shortcode'), 10, 3, );
     add_filter('get_terms', array($this,'custom_sort_terms_admin'), 10, 3 );
   }
@@ -63,15 +64,8 @@ class Sermon_Filter_Shortcodes {
             <input type="text" class="sfb-search-input" placeholder="<?php esc_attr_e('Search...', 'sermon-filter-plugin'); ?>">
             <div class="sfb-search-icon">
               <svg xmlns="http://www.w3.org/2000/svg" id="icon" width="20" height="20" viewBox="0 0 32 32">
-                <defs>
-                  <style>
-                    .cls-1 {
-                      fill: none;
-                    }
-                  </style>
-                </defs>
                 <path d="M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z" transform="translate(0 0)"/>
-                <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
+                <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" fill="none" width="32" height="32"/>
               </svg>
             </div>
           </div>
@@ -100,6 +94,39 @@ class Sermon_Filter_Shortcodes {
     }
     return '';
   }
+
+  // Shortcode to generate a 'back to previous page' link
+  // used in the sermon post
+  public function back_to_previous_page_shortcode() {
+    // Check if the referrer URL exists
+    if (!isset($_SERVER['HTTP_REFERER'])) {
+      return ''; // Return empty if no referrer URL is found
+    }
+    // Get the referrer URL
+    $previous_url = esc_url($_SERVER['HTTP_REFERER']);
+
+    // Add a query parameter to indicate it was accessed from a sermon post
+    $previous_url_with_param = add_query_arg('from_sermon_post', 'true', $previous_url);
+
+    // Return the back button HTML, applying esc_url() for the final URL
+    $back_button_text = __('Back to previous page', 'sermon-filter-plugin');
+
+    return '
+        <div class="sfb-back-to-previous-page">
+            <a href="' . esc_url($previous_url_with_param) . '">
+                <div class="sfb-back-to-left-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.57 19.61" width="25px" height="20px">
+                        <g>
+                            <polygon points="15.33 19.61 7.32 11.8 24.57 11.8 24.57 7.8 7.32 7.8 15.33 0 9.93 0 0 9.8 9.93 19.61 15.33 19.61"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="bcec-back-to-search-result-text">' . esc_html($back_button_text) . '</div>
+            </a>
+        </div>';
+    
+  }
+
 
   // found from GreenShiftWP to ensure that shortcodes within 
   // a query loop get rendered with the correct post data (e.g post_type === 'sermon').
