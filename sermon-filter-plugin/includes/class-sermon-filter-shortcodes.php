@@ -145,12 +145,36 @@ class Sermon_Filter_Shortcodes {
   public function custom_sort_terms_admin( $terms, $taxonomies, $args ) {
     $custom_taxonomies = array( 'scripture', 'speaker' );
 
+    // Check if the $taxonomies array contains more than one taxonomy
+    if ( count($taxonomies) > 1 ) {
+      return $terms; // Do not sort if more than one taxonomy is present
+    }
+
     if ( array_intersect( $taxonomies, $custom_taxonomies ) && isset( $args['orderby'] ) && $args['orderby'] == 'name' ) {
         $order = isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ? -1 : 1;
 
-        usort( $terms, function( $a, $b ) use ( $order ) {
-            return $order * strcmp( $a->slug, $b->slug ); // Sort by slug with the correct order
+        // Get all terms without pagination for accurate sorting
+        $all_terms = get_terms(array(
+          'taxonomy' => $taxonomies,
+          'orderby' => 'none', // Avoid additional sorting
+          'hide_empty' => $args['hide_empty'],
+          'fields' => 'all',
+          'number' => 0 // Retrieve all terms
+        ));
+
+        // Sort the entire set of terms by slug
+        usort($all_terms, function ($a, $b) use ($order) {
+          return $order * strcmp($a->slug, $b->slug); // Sort by slug with the correct order
         });
+        // Apply pagination after sorting
+        $offset = isset($args['offset']) ? $args['offset'] : 0;
+        $number = isset($args['number']) ? $args['number'] : count($all_terms);
+        if ($number === 0) {
+          $number = count($terms);
+        }
+
+        // Slice the sorted array to return only the paginated part
+        $terms = array_slice($all_terms, $offset, $number);
     }
     return $terms;
   }
