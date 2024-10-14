@@ -145,6 +145,11 @@ class Sermon_Filter_Shortcodes {
   public function custom_sort_terms_admin( $terms, $taxonomies, $args ) {
     $custom_taxonomies = array( 'scripture', 'speaker' );
 
+    // Check if the $taxonomies array contains more than one taxonomy
+    if ( count($taxonomies) > 1 ) {
+      return $terms; // Do not sort if more than one taxonomy is present
+    }
+
     if ( array_intersect( $taxonomies, $custom_taxonomies ) && isset( $args['orderby'] ) && $args['orderby'] == 'name' ) {
         $order = isset( $args['order'] ) && strtolower( $args['order'] ) === 'desc' ? -1 : 1;
 
@@ -164,6 +169,9 @@ class Sermon_Filter_Shortcodes {
         // Apply pagination after sorting
         $offset = isset($args['offset']) ? $args['offset'] : 0;
         $number = isset($args['number']) ? $args['number'] : count($all_terms);
+        if ($number === 0) {
+          $number = count($terms);
+        }
 
         // Slice the sorted array to return only the paginated part
         $terms = array_slice($all_terms, $offset, $number);
