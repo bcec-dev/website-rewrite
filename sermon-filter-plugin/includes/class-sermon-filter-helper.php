@@ -73,22 +73,10 @@ class Sermon_Filter_Helper {
       }
       $page_num = $page_num ? $page_num : 1; // Fallback to page 1 if no number found
       
-      // for first item, if it is not a 'prev' indicator,
-      // add a disable '<' text 
-      if ($i == 0 && strpos($page_link, 'prev') == false) {
-        echo '<span class="sfb-page-link disabled">' . self::$prevSvg . '</span>';
-      }
-
       if (strpos($page_link, 'dots') !== false ) {
         echo '<span class="sfb-page-dots">' . $page_link . '</span>';
       } else {
         echo '<span class="sfb-page-link" data-page="' . abs($page_num) . '">' . $page_link . '</span>';
-      }
-
-      // for last item, if it is not a 'next' indicator,
-      // add a disable '>' text 
-      if ($i == $length - 1 && strpos($page_link, 'next') == false) {
-        echo '<span class="sfb-page-link disabled">' . self::$nextSvg . '</span>';
       }
     }
     echo '</div>';

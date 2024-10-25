@@ -91,10 +91,10 @@
   }
 
   .sfb-pagination {
-    margin-top: 20px;
+    margin-top: 60px;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 0px;
 
     .sfb-page-dots {
       padding: 10px;
