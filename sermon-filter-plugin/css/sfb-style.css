@@ -103,7 +103,7 @@
       padding: 10px;
 
       &:has(svg) {
-        padding: 5px 10px;
+        padding: 8px 10px;
       }        
       
       svg {
@@ -208,7 +208,7 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
   position: absolute;
-  top: 110px;
+  top: 120px;
   left: calc(50% - 42px);
   transform: translate(-50%, -50%);
   z-index: 1000; /* Ensure spinner is on top */
@@ -225,6 +225,8 @@
 
 .sfb-loading .sfb-results-container {
   opacity: 0.3;
+  min-height: 60px;
+  pointer-events: none;
 }
 
 /* style for the "back to previous page" link */
