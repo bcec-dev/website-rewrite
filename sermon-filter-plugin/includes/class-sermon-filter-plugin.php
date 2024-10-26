@@ -32,7 +32,7 @@ class Sermon_Filter_Plugin {
 
     // Load plugin textdomain
     public function load_textdomain() {
-        load_plugin_textdomain('sermon-filter-plugin', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('sermon-filter-plugin', false, dirname(plugin_basename(__FILE__)) . '/../languages');
     }
 
     // Enqueue styles and scripts
