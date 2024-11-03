@@ -91,7 +91,7 @@ nav.bcec-nav-bar {
   }
 
   .bcec-search {
-	border-left: 1px solid #0073AE;
+    border-left: 1px solid #0073AE;
     height: 30px;
 
     svg.search-icon {
@@ -113,7 +113,7 @@ nav.bcec-nav-bar {
   .wp-block-navigation .has-child .wp-block-navigation__submenu-container {
     top: calc(100% + 12px);
     min-width: 320px !important;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
     .wp-block-navigation-item {
       margin-bottom: 2px;
@@ -205,14 +205,14 @@ nav.bcec-nav-bar {
 
     .bcec-header-container {
       display: flex;
-	  .bcec-header-nav-container {
+      .bcec-header-nav-container {
         margin-top: 10px !important;
       }
     }
   }
   .bcec-footer-logo {
     display: flex;
-	justify-content: center;
+    justify-content: center;
   }
 }
 
