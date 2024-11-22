@@ -3,50 +3,47 @@
   flex-wrap: wrap;
   gap: 10px 20px;
   padding-bottom: 20px;
+}
+.sfb-search-bar {
+  display: flex;
+  height: 53px;
+  flex: 1;
+  min-width: 130px;
+}
+.sfb-search-input-wrapper {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  position: relative;
+  width: 100%;
+  border: 1px solid #ccc; /* Optional border */
+  border-radius: 6px;
+  background-color: #fff; /* Optional background color */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 
-  .sfb-search-bar {
-    display: flex;
-    height: 53px;
-    flex: 1;
-    min-width: 130px;
-
-    .sfb-search-input-wrapper {
-      display: flex;
-      align-items: center; /* Vertically align items */
-      position: relative;
-      width: 100%;
-      border: 1px solid #ccc; /* Optional border */
-      border-radius: 6px;
-      background-color: #fff; /* Optional background color */
-      transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
-    
-      &:focus-within {
-        border-color: #007bff; /* Highlight border color */
-        box-shadow: 0 0 4px #007bff; /* Optional shadow for focus effect */
-      }
-    }
-
-    .sfb-search-input {
-      flex: 1; /* Let input take all the available space */
-      border: none; /* Remove the border from input since wrapper has a border */
-      font-size: 18px;
-      padding: 8px 10px; /* Add padding on left side */
-      border-radius: 6px;
-      max-width: calc(100% - 50px);
-      
-      &:focus {
-        outline: none; /* Remove focus outline */
-      }
-    }
-
-    .sfb-search-icon {
-      margin-right: 10px; /* Add some spacing between icon and input content */
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  &:focus-within {
+    border-color: #007bff; /* Highlight border color */
+    box-shadow: 0 0 4px #007bff; /* Optional shadow for focus effect */
   }
+}
+
+.sfb-search-input {
+  flex: 1; /* Let input take all the available space */
+  border: none; /* Remove the border from input since wrapper has a border */
+  font-size: 18px;
+  padding: 8px 10px; /* Add padding on left side */
+  border-radius: 6px;
+  max-width: calc(100% - 50px);
+}
+.sfb-search-input:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.sfb-search-icon {
+  margin-right: 10px; /* Add some spacing between icon and input content */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sfb-filter-button {
@@ -112,50 +109,47 @@
         flex: 0 0 100%; /* 1 item per row on mobile */
     }
   }
+} /* end of .sfb-results-container */
+.sfb-pagination {
+  margin-top: 60px;
+  display: flex;
+  justify-content: center;
+  gap: 0px;
+}
+.sfb-page-dots {
+  padding: 10px;
+}
+.sfb-page-link {
+  padding: 10px;
+}
+.sfb-page-link:has(svg) {
+  padding: 8px 10px;
+}        
+  
+.sfb-page-link svg {
+  width: 32px;
+  height: 32px;
+  fill: #1d427d; 
+}
 
-  .sfb-pagination {
-    margin-top: 60px;
-    display: flex;
-    justify-content: center;
-    gap: 0px;
+.sfb-page-link a {
+  color: #003E7F;
+  text-decoration: none;
+  &:hover {
+    color:#018882;
 
-    .sfb-page-dots {
-      padding: 10px;
-    }
-    .sfb-page-link {
-      padding: 10px;
-
-      &:has(svg) {
-        padding: 8px 10px;
-      }        
-      
-      svg {
-        width: 32px;
-        height: 32px;
-        fill: #1d427d; 
-      }
-
-      a {
-        color: #003E7F;
-        text-decoration: none;
-        &:hover {
-          color:#018882;
-
-          svg {
-            fill: #018882;
-          }
-        }
-      }
-      &.disabled svg {
-        fill: #696969;
-      }
-      span.current {
-        color: #696969;
-        text-decoration: underline;
-      }
+    svg {
+      fill: #018882;
     }
   }
-} /* end of .sfb-results-container */
+}
+.sfb-page-link.disabled svg {
+  fill: #696969;
+}
+.sfb-page-link span.current {
+  color: #696969;
+  text-decoration: underline;
+}
 
 /* 
   Style for embed video to make the iframe be resizible
