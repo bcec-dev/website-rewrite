@@ -74,42 +74,40 @@
 
 .sfb-results-container {
   margin-top: 10px;
-
-  /* style for results */
-  .sfb-sermons-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 60px 30px; /* Adjust the gap between items as needed */
-
-    article {
-      flex: 0 0 calc(50% - 15px); /* 2 items per row, with gap adjustment */
-      box-sizing: border-box;
-  
-      .sermon-content {
-        margin: 0;
-        padding: 0;
-        color: #003E7F;
-      }
-      .sermon-title {
-        margin-top: 20px;
-        a {
-          text-decoration: none;
-          color: #003E7F;
-          font-weight: bold;
-          &:hover {
-            color: #018882;
-          }
-        }
-      }
-    }
+}
+/* style for results */
+.sfb-results-container .sfb-sermons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px 30px; /* Adjust the gap between items as needed */
+}
+.sfb-results-container .sfb-sermons-grid article {
+  flex: 0 0 calc(50% - 15px); /* 2 items per row, with gap adjustment */
+  box-sizing: border-box;
+}
+.sfb-results-container .sfb-sermons-grid article .sermon-content {
+    margin: 0;
+    padding: 0;
+    color: #003E7F;
+}
+.sfb-results-container .sfb-sermons-grid article .sermon-title {
+    margin-top: 20px;
+}
+.sfb-results-container .sfb-sermons-grid article .sermon-title a {
+  text-decoration: none;
+  color: #003E7F;
+  font-weight: bold;
+  &:hover {
+    color: #018882;
   }
+}
 
-  @media (max-width: 480px) {
-    .sfb-sermons-grid article {
-        flex: 0 0 100%; /* 1 item per row on mobile */
-    }
+@media (max-width: 480px) {
+  .sfb-results-container .sfb-sermons-grid article {
+      flex: 0 0 100%; /* 1 item per row on mobile */
   }
-} /* end of .sfb-results-container */
+}
+
 .sfb-pagination {
   margin-top: 60px;
   display: flex;
@@ -160,12 +158,12 @@
   padding-top: 0;
   margin-bottom: 0;
   border-radius: 16px;
-  iframe {
-      width: 100%;
-      height: 100%;
-      border-radius: 16px;
-      aspect-ratio: 16 / 9;
-  }
+}
+.sfb-sermon-embed-video iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    aspect-ratio: 16 / 9;
 }
 
 /*
@@ -243,27 +241,25 @@
 }
 
 /* style for the "back to previous page" link */
-.sfb-back-to-previous-page {
-  a {
-    display: flex;
-    color: #003E7F;
-    border: 0;
-    outline-style: none;
-    text-decoration: none;
+.sfb-back-to-previous-page a {
+  display: flex;
+  color: #003E7F;
+  border: 0;
+  outline-style: none;
+  text-decoration: none;
 
-    &:hover {
-      color: #018882;
-      svg {
-        fill: #018882;
-      }
-    }
-    .sfb-back-to-left-arrow {
-      margin-right: 20px;
-      margin-top: 4px;
-    }
+  &:hover {
+    color: #018882;
     svg {
-      fill: #003E7F;
+      fill: #018882;
     }
-
   }
 }
+.sfb-back-to-previous-page a .sfb-back-to-left-arrow {
+  margin-right: 20px;
+  margin-top: 4px;
+}
+.sfb-back-to-previous-page a svg {
+  fill: #003E7F;
+}
+
