@@ -192,12 +192,13 @@ add_action(
  
         // CSS styles
         echo '<style>
-            .tribe-common .event-category-buttons-container {
+            .event-category-buttons-container {
                 display: flex;
                 flex-wrap: wrap;
                 margin-bottom: 20px;
                 margin-left: -10px;
-                .event-category-button {
+           }
+                .event-category-buttons-container .event-category-button {
                     display: inline-block;
                      padding: 16px 50px;
                     color: #ffffff;
@@ -210,6 +211,12 @@ add_action(
                     margin: 10px;
                     min-width: 140px;
                     text-align: center;
+                }
+				@media (max-width: 767px) {
+                  .event-category-buttons-container .event-category-button { 
+                    padding: 2px 10px;
+                    min-width: 80px;
+                  }
                 }
                 .event-category-button-default {
                     background-color: #003E7F;
@@ -229,7 +236,7 @@ add_action(
                     margin:0;
                     padding: 0;
                 }
-            }
+
         </style>';
 
         // Start container for buttons
@@ -248,9 +255,10 @@ add_action(
             $active_class = $is_active ? 'event-category-button-active' : 'event-category-button-default';
             
             $btn = "<div class=\"event-category-button $active_class\" onclick=\"location.href='$url'\">$name</div>";
-            if ($single_term->slug == 'chinatown_events' ) {
+
+			if (strpos($single_term->slug, 'chinatown_events') !== false) {
                 $chinatown_events_btn = $btn;
-            } else if ($single_term->slug == 'newton_events') {
+            } elseif (strpos($single_term->slug, 'newton_events') !== false) {
                 $newton_events_btn = $btn;
             } else {
                 echo $btn;
@@ -446,6 +454,37 @@ function insertEventIconDescription($html, $file, $name, $eventEntry) {
 add_filter('tribe_template_include_html:events/v2/components/header-title',
 'insertEventIconDescription', 10, 4);
 
+/**
+ * Hook for customize the date format for zh_TW and zh_CN locale
+ */
+add_filter('tribe_date_format', 'custom_tribe_date_format_based_on_locale', 10, 1);
+function custom_tribe_date_format_based_on_locale($format) {
+    $locale = get_locale();
+    // Customize date format based on locale and context
+    if ($locale === 'zh_TW' || $locale === 'zh_CN') {
+        if (strpos($format, 'Y') === false) {
+            $format = 'F j日';
+        } else {
+            $format = 'Y年 F j日';
+        }
+    }
+    return $format;
+};
+
+/**
+ * Hook for customize the time format for zh_TW and zh_CN locale
+ */
+add_filter('option_time_format', 'custom_option_time_format_based_on_locale', 10, 1);
+function custom_option_time_format_based_on_locale($value) {
+    $locale = get_locale();
+    // Customize time format based on locale and context
+    if ($locale === 'zh_TW' || $locale === 'zh_CN') {
+        if (strpos($value, 'a') !== false) {
+            $value = 'a g:i';
+        } 
+    }
+    return $value;
+};
 
 /**
  * Shortcode to display the event start date in vertical
@@ -558,3 +597,23 @@ $excerpt = get_field( 'sermon_theme', $post->ID );
 return $excerpt;
 }, 10, 2 );
 
+/**
+ * ShortCode to add Google translate button
+ */
+function google_translate_shortcode() {
+    $locale = get_locale();
+    return '<div id="google_translate_element"></div>
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement(
+                    {
+                        pageLanguage: "' . $locale . '",
+                        includedLanguages: "en,zh-CN,zh-TW",
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    },
+                    "google_translate_element");
+                }
+            </script>
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>';
+}
+add_shortcode('google_translate', 'google_translate_shortcode');
