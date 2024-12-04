@@ -19,12 +19,12 @@
   border-radius: 6px;
   background-color: #fff; /* Optional background color */
   transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
-
-  &:focus-within {
-    border-color: #007bff; /* Highlight border color */
-    box-shadow: 0 0 4px #007bff; /* Optional shadow for focus effect */
-  }
 }
+.sfb-search-input-wrapper:focus-within {
+  border-color: #007bff; /* Highlight border color */
+  box-shadow: 0 0 4px #007bff; /* Optional shadow for focus effect */
+}
+
 
 .sfb-search-input {
   flex: 1; /* Let input take all the available space */
@@ -58,10 +58,10 @@
   min-width: 140px;
   text-align: center;
   font-size: 18px;
+}
 
-  &:last-of-type {
-    margin-right: 10px;
-  }
+.sfb-filter-button:last-of-type {
+  margin-right: 10px;
 }
 
 .sfb-filter-button:hover {
@@ -97,9 +97,9 @@
   text-decoration: none;
   color: #003E7F;
   font-weight: bold;
-  &:hover {
-    color: #018882;
-  }
+}
+.sfb-results-container .sfb-sermons-grid article .sermon-title a:hover {
+  color: #018882;
 }
 
 @media (max-width: 480px) {
@@ -133,14 +133,14 @@
 .sfb-page-link a {
   color: #003E7F;
   text-decoration: none;
-  &:hover {
-    color:#018882;
-
-    svg {
-      fill: #018882;
-    }
-  }
 }
+.sfb-page-link a:hover {
+    color:#018882;
+}
+.sfb-page-link a:hover svg {
+  fill: #018882;
+}
+
 .sfb-page-link.disabled svg {
   fill: #696969;
 }
@@ -247,14 +247,14 @@
   border: 0;
   outline-style: none;
   text-decoration: none;
-
-  &:hover {
-    color: #018882;
-    svg {
-      fill: #018882;
-    }
-  }
 }
+.sfb-back-to-previous-page a:hover {
+  color: #018882;
+}
+.sfb-back-to-previous-page a:hover svg {
+  fill: #018882;
+}
+
 .sfb-back-to-previous-page a .sfb-back-to-left-arrow {
   margin-right: 20px;
   margin-top: 4px;
