@@ -25,21 +25,21 @@
     }
     // Get the categories for the current post
     $categories = get_the_category();
+    $categories_names = $categories && !is_wp_error($categories) ? wp_list_pluck($categories, 'name') : [];
+    // $contains_newton = false; // Initialize a flag
 
-    $contains_newton = false; // Initialize a flag
-
-    // Loop through each category
-    foreach ($categories as $category) {
-        // Check if the slug contains 'newton'
-        if (strpos($category->slug, 'newton') !== false) {
-            $contains_newton = true; // Set flag to true if found
-            break; // Exit the loop early
-        }
-    }
-    $location = __('Chinatown', 'sermon-filter-plugin');
-    if ($contains_newton) {
-        $location = __('Newton', 'sermon-filter-plugin');
-    }
+    // // Loop through each category
+    // foreach ($categories as $category) {
+    //     // Check if the slug contains 'newton'
+    //     if (strpos($category->slug, 'newton') !== false) {
+    //         $contains_newton = true; // Set flag to true if found
+    //         break; // Exit the loop early
+    //     }
+    // }
+    // $location = __('Chinatown', 'sermon-filter-plugin');
+    // if ($contains_newton) {
+    //     $location = __('Newton', 'sermon-filter-plugin');
+    // }
     ?>
 
     <div class="sermon-content">
@@ -68,7 +68,9 @@
             </div>
         <?php endif; ?>
         <?php if ($show_location) : ?>
-            <div class="sermon_location"><?php echo esc_html($location); ?></div>
+            <div class="sermon_location">
+                <?php echo esc_html(implode(', ', $categories_names)); ?>
+            </div>
         <?php endif; ?>
     </div>
 </article>
