@@ -1,3 +1,20 @@
+:root {
+  --sfb-active-link-color: #0670A7;
+  --sfb-active-link-hover-color:  #018882;
+  --sfb-search-border-color: #707070;
+  --sfb-search-border-focus-color: #007bff;
+  --sfb-search-background-color: #ffffff;
+  --sfb-filter-button-font-color: #ffffff;
+  --sfb-filter-button-background-color: #0670A7;
+  --sfb-filter-button-hover-background-color: #0056b3;
+  --sfb-filter-button-active-background-color: #696969;
+  --sfb-sermon-content-color: #0670A7;
+  --sfb-page-link-current-color: #696969;
+  --sfb-page-link-disable-svg-fill-color: #696969;
+  --sfb-spinner-border-color: #f3f3f3;
+  --sfb-spinner-border-top-color: #3498db;
+}
+
 .sfb-actions-container {
   display: flex;
   flex-wrap: wrap;
@@ -15,14 +32,14 @@
   align-items: center; /* Vertically align items */
   position: relative;
   width: 100%;
-  border: 1px solid #ccc; /* Optional border */
+  border: 1px solid var(--sfb-search-border-color); /* Optional border */
   border-radius: 6px;
-  background-color: #fff; /* Optional background color */
+  background-color: var(--sfb-search-background-color); /* Optional background color */
   transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
 }
 .sfb-search-input-wrapper:focus-within {
-  border-color: #007bff; /* Highlight border color */
-  box-shadow: 0 0 4px #007bff; /* Optional shadow for focus effect */
+  border-color: var(--sfb-search-border-focus-color); /* Highlight border color */
+  box-shadow: 0 0 4px var(--sfb-search-border-focus-color); /* Optional shadow for focus effect */
 }
 
 
@@ -49,8 +66,8 @@
 .sfb-filter-button {
   padding: 16px 50px;
   cursor: pointer;
-  background-color: #003E7F;
-  color: #ffffff;
+  background-color: var(--sfb-filter-button-background-color);
+  color: var(--sfb-filter-button-font-color);
   border: none;
   border-radius: 6px;
   transition: background-color 0.3s ease;
@@ -65,11 +82,11 @@
 }
 
 .sfb-filter-button:hover {
-  background-color: #0056b3;
+  background-color: var(--sfb-filter-button-hover-background-color);
 }
 
 .sfb-filter-button.active {
-  background-color: #696969;
+  background-color: var(--sfb-filter-button-active-background-color);
 }
 
 .sfb-results-container {
@@ -88,18 +105,18 @@
 .sfb-results-container .sfb-sermons-grid article .sermon-content {
     margin: 0;
     padding: 0;
-    color: #003E7F;
+    color: var(--sfb-sermon-content-color);
 }
 .sfb-results-container .sfb-sermons-grid article .sermon-title {
     margin-top: 20px;
 }
 .sfb-results-container .sfb-sermons-grid article .sermon-title a {
   text-decoration: none;
-  color: #003E7F;
+  color: var(--sfb-active-link-color);
   font-weight: bold;
 }
 .sfb-results-container .sfb-sermons-grid article .sermon-title a:hover {
-  color: #018882;
+  color: var(--sfb-active-link-hover-color);
 }
 
 @media (max-width: 480px) {
@@ -127,25 +144,25 @@
 .sfb-page-link svg {
   width: 32px;
   height: 32px;
-  fill: #1d427d; 
+  fill: var(--sfb-active-link-color); 
 }
 
 .sfb-page-link a {
-  color: #003E7F;
+  color: var(--sfb-active-link-color);
   text-decoration: none;
 }
 .sfb-page-link a:hover {
-    color:#018882;
+    color:var(--sfb-active-link-hover-color);
 }
 .sfb-page-link a:hover svg {
-  fill: #018882;
+  fill: var(--sfb-active-link-hover-color);
 }
 
 .sfb-page-link.disabled svg {
-  fill: #696969;
+  fill: var(--sfb-page-link-disable-svg-fill-color);
 }
 .sfb-page-link span.current {
-  color: #696969;
+  color: var(--sfb-page-link-current-color);
   text-decoration: underline;
 }
 
@@ -180,14 +197,14 @@
   display: flex;
   transition: background-color 0.3s ease;
   gap: 10px 20px;
-  color: #003E7F;
-  border-bottom: 1px solid #003E7F;
+  color: var(--sfb-active-link-color);
+  border-bottom: 1px solid var(--sfb-active-link-color);
   padding: 20px 0px;
   font-weight: 700;
 }
 
 .sfb-child-taxonomy-link:hover {
-  color: #018882;
+  color: var(--sfb-active-link-hover-color);
 }
 
 .sfb-term-name {
@@ -214,8 +231,8 @@
   display: none;
   width: 50px;
   height: 50px;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #3498db;
+  border: 6px solid var(--sfb-spinner-border-color);
+  border-top: 6px solid var(--sfb-spinner-border-top-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   position: absolute;
@@ -243,16 +260,16 @@
 /* style for the "back to previous page" link */
 .sfb-back-to-previous-page a {
   display: flex;
-  color: #003E7F;
+  color: var(--sfb-active-link-color);
   border: 0;
   outline-style: none;
   text-decoration: none;
 }
 .sfb-back-to-previous-page a:hover {
-  color: #018882;
+  color: var(--sfb-active-link-hover-color);
 }
 .sfb-back-to-previous-page a:hover svg {
-  fill: #018882;
+  fill: var(--sfb-active-link-hover-color);
 }
 
 .sfb-back-to-previous-page a .sfb-back-to-left-arrow {
@@ -260,6 +277,6 @@
   margin-top: 4px;
 }
 .sfb-back-to-previous-page a svg {
-  fill: #003E7F;
+  fill: var(--sfb-active-link-color);
 }
 
