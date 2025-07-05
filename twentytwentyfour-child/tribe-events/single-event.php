@@ -75,9 +75,9 @@ $title = apply_filters( 'tribe_events_single_event_title_html', the_title( $befo
 $header_title = apply_filters( 'tec_events_views_v2_view_header_title', '', null);
 $date_with_year_format    = tribe_get_date_format( true );
 $start_date = tribe_get_start_date( $event_id, false, $date_with_year_format ); 
-$end_date = tribe_get_end_date( $event_id );
-$start_time = tribe_get_start_date( $event_id, false, 'g:i a' );
-$end_time = tribe_get_end_date( $event_id, false, 'g:i a' );
+$end_date = tribe_get_end_date( $event_id, false, $date_with_year_format );
+$start_time = tribe_get_start_time( $event_id );
+$end_time = tribe_get_end_time( $event_id );
 $location = tribe_get_venue( $event_id );
 $permalink = get_permalink();
 // Get the current language
@@ -85,14 +85,10 @@ $current_language = apply_filters('wpml_current_language', null);
 $back_to_search_result = 'Back to search result';
 $chinatown_campus = 'Chinatown Campus';
 $newton_campus = 'Newton Campus';
-if ($current_language == 'zh-hant') {
+if ($current_language == 'zh-hant' || $current_language == 'zh-hans') {
 		$back_to_search_result = '返回搜尋結果';
 		$chinatown_campus = '華埠堂';
 		$newton_campus = '牛頓堂';
-} else if ($current_language == 'zh-hans') {
-	$back_to_search_result = '返回搜索结果';
-	$chinatown_campus = '华埠堂';
-	$newton_campus = '牛顿堂';
 }
 ?>
 
@@ -148,7 +144,16 @@ if ($current_language == 'zh-hant') {
 	  	</div>
 			<!-- Date -->
 			<div class="tribe_events_single_event_date">
-			 <span>Date:</span><span><?php echo esc_html($start_date); ?><span>
+			 <span>Date:</span>
+			 <span>
+				 <?php
+					if (tribe_event_is_all_day( $event_id )) {
+						echo esc_html($start_date) . ' - ' . esc_html($end_date);
+					} else {
+						echo esc_html($start_date);
+					}
+				?>
+		     <span>
 	  	</div>
 			<!-- Location -->
 			<div class="tribe_events_single_event_location">
