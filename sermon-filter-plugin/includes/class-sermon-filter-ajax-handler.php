@@ -77,6 +77,7 @@ class Sermon_Filter_Ajax_Handler {
                 'post_type' => 'sermon',
                 'posts_per_page' => $posts_per_page,
                 'paged' => $paged,
+                'post_status' => 'publish',
                 'orderby' => 'date',
                 'order' => 'DESC'
             );
@@ -86,6 +87,7 @@ class Sermon_Filter_Ajax_Handler {
                     'post_type' => 'sermon',
                     'posts_per_page' => $posts_per_page,
                     'paged' => $paged,
+                    'post_status' => 'publish',
                     'tax_query' => array(
                         array(
                             'taxonomy' => $filter,
