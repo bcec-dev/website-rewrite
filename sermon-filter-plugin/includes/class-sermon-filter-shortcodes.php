@@ -157,13 +157,13 @@ class Sermon_Filter_Shortcodes {
 
         if (isset($args['number']) && $args['number'] !== 0) {
           // Get all terms without pagination for accurate sorting
-          $all_terms = get_terms(array(
-            'taxonomy' => $taxonomies,
-            'orderby' => 'none', // Avoid additional sorting
-            'hide_empty' => $args['hide_empty'],
-            'fields' => 'all',
-            'number' => 0 // Retrieve all terms
-          ));
+          $all_terms_args = $args;
+          $all_terms_args['orderby'] = 'none'; // Avoid additional sorting by WordPress, we'll sort manually by slug
+          $all_terms_args['fields'] = 'all';
+          $all_terms_args['number'] = 0; // Retrieve all terms without pagination
+          $all_terms_args['offset'] = 0;
+
+          $all_terms = get_terms($all_terms_args);
 
           // Sort the entire set of terms by slug
           usort($all_terms, function ($a, $b) use ($order) {

@@ -100,7 +100,7 @@ class Sermon_Filter_Ajax_Handler {
                 $args = array(
                     'taxonomy'   => $filter,
                     'hide_empty' => true,
-                    'parent'     => 0,
+                    'childless'  => true, // return only leaves
                     'number'     => $taxonomy_terms_per_page,
                     'offset'     => ($paged - 1) * $taxonomy_terms_per_page,
                 );
