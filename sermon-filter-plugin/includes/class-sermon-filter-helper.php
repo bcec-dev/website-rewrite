@@ -100,7 +100,7 @@ class Sermon_Filter_Helper {
   }
 
   public static function display_taxonomy_pagination($taxonomy_name) {
-    $total_taxonomies = wp_count_terms($taxonomy_name, array('parent' => 0, 'hide_empty' => true));
+    $total_taxonomies = wp_count_terms($taxonomy_name, array('childless' => true, 'hide_empty' => true));
     $shortcode_atts = get_option('sfb_shortcode_atts');
     $taxonomy_terms_per_page = $shortcode_atts['taxonomy_terms_per_page'];
     $total_pages = ceil($total_taxonomies / $taxonomy_terms_per_page);
